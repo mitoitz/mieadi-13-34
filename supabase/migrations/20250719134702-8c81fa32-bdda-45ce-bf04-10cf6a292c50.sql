@@ -1,0 +1,13 @@
+-- Import subjects with correct UUID format
+INSERT INTO public.subjects (id, name, description, code, credits, course_id, professor_id) VALUES
+  ('881fb733-15ce-4407-9049-779988773333', 'Teologia Sistemática', 'Estudo das doutrinas cristãs fundamentais', 'TS001', 6, '770fa622-04bd-63f6-c938-668877662222', NULL),
+  ('881fb733-15ce-4407-9049-779988773334', 'Hermenêutica Bíblica', 'Princípios de interpretação das Escrituras', 'HB002', 4, '770fa622-04bd-63f6-c938-668877662222', NULL),
+  ('881fb733-15ce-4407-9049-779988773335', 'Homilética', 'Arte e ciência da pregação', 'HM003', 4, '770fa622-04bd-63f6-c938-668877662223', NULL);
+
+-- Import first batch of profiles (5 profiles to keep it small)
+INSERT INTO public.profiles (id, full_name, email, cpf, phone, birth_date, address, role, status, congregation_id, field_id, course_id, gender, civil_status, ministerial_position, member_since) VALUES
+  ('10b9c3e4-2e4a-4d5b-8f7c-123456789001', 'João Silva Santos', 'joao.silva@email.com', '12345678901', '(11) 99999-0001', '1985-03-15', 'Rua das Flores, 123, São Paulo, SP', 'pastor', 'ativo', '550e8400-e29b-41d4-a716-446655440000', '660f9511-f3ac-52e5-b827-557766551111', '770fa622-04bd-63f6-c938-668877662222', 'masculino', 'casado', 'Pastor Presidente', '2010-01-15'),
+  ('10b9c3e4-2e4a-4d5b-8f7c-123456789002', 'Maria Santos Costa', 'maria.santos@email.com', '12345678902', '(11) 99999-0002', '1990-07-22', 'Av. Principal, 456, São Paulo, SP', 'professor', 'ativo', '550e8400-e29b-41d4-a716-446655440000', '660f9511-f3ac-52e5-b827-557766551111', '770fa622-04bd-63f6-c938-668877662222', 'feminino', 'casada', 'Professora de Teologia', '2015-03-10'),
+  ('10b9c3e4-2e4a-4d5b-8f7c-123456789003', 'Pedro Oliveira Lima', 'pedro.oliveira@email.com', '12345678903', '(21) 99999-0003', '1988-11-08', 'Rua Norte, 789, Rio de Janeiro, RJ', 'coordenador', 'ativo', '550e8400-e29b-41d4-a716-446655440001', '660f9511-f3ac-52e5-b827-557766551112', '770fa622-04bd-63f6-c938-668877662223', 'masculino', 'solteiro', 'Coordenador de Campo', '2012-08-20'),
+  ('10b9c3e4-2e4a-4d5b-8f7c-123456789004', 'Ana Paula Fernandes', 'ana.paula@email.com', '12345678904', '(31) 99999-0004', '1992-05-30', 'Rua Sul, 321, Belo Horizonte, MG', 'aluno', 'ativo', '550e8400-e29b-41d4-a716-446655440002', '660f9511-f3ac-52e5-b827-557766551113', '770fa622-04bd-63f6-c938-668877662222', 'feminino', 'solteira', NULL, '2020-02-05'),
+  ('10b9c3e4-2e4a-4d5b-8f7c-123456789005', 'Carlos Eduardo Rocha', 'carlos.eduardo@email.com', '12345678905', '(11) 99999-0005', '1987-12-12', 'Av. Central, 654, São Paulo, SP', 'secretario', 'ativo', '550e8400-e29b-41d4-a716-446655440000', '660f9511-f3ac-52e5-b827-557766551111', NULL, 'masculino', 'casado', 'Secretário', '2018-06-15');

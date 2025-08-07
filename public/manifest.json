@@ -1,0 +1,41 @@
+{
+  "name": "MIEADI - Sistema Acadêmico",
+  "short_name": "MIEADI",
+  "description": "Sistema de Gestão Acadêmica MIEADI - Ministério Eclesiástico da Assembleia de Deus em Ipiranga",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "lovable-uploads/3781b316-2d9c-4e52-9847-bbf43a15c4fe.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "lovable-uploads/3781b316-2d9c-4e52-9847-bbf43a15c4fe.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Marcar Frequência",
+      "short_name": "Frequência",
+      "description": "Marcar presença rapidamente",
+      "url": "/frequencia",
+      "icons": [
+        {
+          "src": "lovable-uploads/3781b316-2d9c-4e52-9847-bbf43a15c4fe.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

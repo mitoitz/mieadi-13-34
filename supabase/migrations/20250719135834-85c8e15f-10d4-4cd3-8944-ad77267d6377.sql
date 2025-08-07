@@ -1,0 +1,9 @@
+-- Continue with more profiles and classes
+INSERT INTO public.profiles (id, full_name, email, cpf, phone, birth_date, address, role, status, congregation_id, field_id, course_id, gender, civil_status, ministerial_position, member_since) VALUES
+  ('10b9c3e4-2e4a-4d5b-8f7c-123456789004', 'Ana Paula Fernandes', 'ana.paula@email.com', '12345678904', '(31) 99999-0004', '1992-05-30', 'Rua Sul, 321, Belo Horizonte, MG', 'aluno', 'ativo', '550e8400-e29b-41d4-a716-446655440002', '660f9511-f3ac-52e5-b827-557766551113', '770fa622-04bd-63f6-c938-668877662222', 'feminino', 'solteira', NULL, '2020-02-05'),
+  ('10b9c3e4-2e4a-4d5b-8f7c-123456789005', 'Carlos Eduardo Rocha', 'carlos.eduardo@email.com', '12345678905', '(11) 99999-0005', '1987-12-12', 'Av. Central, 654, São Paulo, SP', 'secretario', 'ativo', '550e8400-e29b-41d4-a716-446655440000', '660f9511-f3ac-52e5-b827-557766551111', NULL, 'masculino', 'casado', 'Secretário', '2018-06-15');
+
+-- Import classes
+INSERT INTO public.classes (id, name, subject_id, professor_id, congregation_id, start_date, end_date, max_students, status, schedule) VALUES
+  ('991fc844-26df-5518-a15a-889999884444', 'Turma Teologia A', '881fb733-15ce-4407-9049-779988773333', '10b9c3e4-2e4a-4d5b-8f7c-123456789002', '550e8400-e29b-41d4-a716-446655440000', '2024-02-01', '2024-12-15', 25, 'ativa', 'Segunda-feira 19:00-21:00'),
+  ('991fc844-26df-5518-a15a-889999884445', 'Turma Hermenêutica B', '881fb733-15ce-4407-9049-779988773334', '10b9c3e4-2e4a-4d5b-8f7c-123456789002', '550e8400-e29b-41d4-a716-446655440000', '2024-03-01', '2024-11-30', 20, 'ativa', 'Quarta-feira 19:30-21:30');

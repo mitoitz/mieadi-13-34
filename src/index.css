@@ -1,0 +1,313 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* MIEADI Brand Colors - Cores da Logo */
+    --primary: 201 97% 49%;         /* Azul principal da logo MIEADI */
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 201 97% 65%;   /* Azul mais claro */
+    --primary-dark: 201 97% 35%;    /* Azul mais escuro */
+
+    --secondary: 25 95% 53%;        /* Laranja/Amarelo da chama */
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 35 95% 63%;  /* Amarelo mais claro */
+    
+    --accent: 142 69% 58%;          /* Verde da folha na logo */
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 142 69% 68%;    /* Verde mais claro */
+
+    /* Login Specific Colors - Blue Theme */
+    --login-bg: 217 20% 97%;        /* #F1F5F9 - Fundo azul muito claro */
+    --login-card-bg: 0 0% 100%;     /* #FFFFFF - Fundo do card de login */
+    --login-text: 217 91% 35%;      /* #1E40AF - Texto azul escuro */
+    --login-placeholder: 217 32% 65%; /* #64748B - Placeholder azul acinzentado */
+    --login-border: 217 32% 89%;    /* #CBD5E1 - Borda azul clara */
+    --login-error: 0 74% 49%;       /* #DC2626 - Cor de erro (mantida) */
+    --login-success: 142 71% 45%;   /* #16A34A - Cor de sucesso (mantida) */
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 208 84% 29%;
+
+    /* MIEADI Gradients - Baseados nas cores da logo */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-light)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--accent)) 100%);
+    --gradient-mieadi: linear-gradient(135deg, hsl(201 97% 49%) 0%, hsl(25 95% 53%) 30%, hsl(142 69% 58%) 70%, hsl(0 84% 60%) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    --gradient-glow: radial-gradient(ellipse at center, hsl(var(--primary) / 0.3), transparent);
+    --gradient-cyber: linear-gradient(45deg, hsl(201 97% 15%), hsl(25 95% 15%), hsl(142 69% 15%));
+    --gradient-neon: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)));
+    --gradient-mesh: linear-gradient(135deg, hsl(201 97% 10%), hsl(25 95% 10%), hsl(142 69% 15%), hsl(201 97% 20%));
+
+    /* Shadows */
+    --shadow-primary: 0 10px 30px -10px hsl(var(--primary) / 0.3);
+    --shadow-secondary: 0 10px 30px -10px hsl(var(--secondary) / 0.3);
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.2);
+    --shadow-futuristic: 0 20px 40px -15px hsl(var(--primary) / 0.4), 0 0 20px hsl(var(--primary) / 0.1);
+    --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    --shadow-neon: 0 0 20px hsl(var(--primary) / 0.5), 0 0 40px hsl(var(--primary) / 0.3), 0 0 60px hsl(var(--primary) / 0.1);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s ease-out;
+    --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Enhanced Border Radius */
+    --radius: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-2xl: 2rem;
+
+    /* Success and Info colors */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+    --warning: 45 93% 58%;
+    --warning-foreground: 222.2 84% 4.9%;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Dark mode MIEADI Colors - Cores da Logo */
+    --primary: 201 97% 65%;        /* Azul MIEADI mais claro no dark */
+    --primary-foreground: 201 97% 10%;
+    --primary-light: 201 97% 75%;
+    --primary-dark: 201 97% 55%;
+
+    --secondary: 25 95% 63%;       /* Laranja/Amarelo mais claro no dark */
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 35 95% 73%;
+    
+    --accent: 142 69% 68%;         /* Verde MIEADI mais claro no dark */
+    --accent-foreground: 142 69% 10%;
+    --accent-light: 142 69% 78%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 248 75% 70%;
+
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-light)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--accent)) 100%);
+
+    /* Sidebar dark mode - Blue Theme */
+    --sidebar-background: 217 91% 10%;
+    --sidebar-foreground: 217 20% 95%;
+    --sidebar-primary: 217 91% 75%;
+    --sidebar-primary-foreground: 217 91% 10%;
+    --sidebar-accent: 217 50% 15%;
+    --sidebar-accent-foreground: 217 20% 95%;
+    --sidebar-border: 217 50% 15%;
+    --sidebar-ring: 217 91% 75%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Scroll customization */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 10px;
+    transition: background 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Custom animations and utilities */
+  .hover-lift {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-lg;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-primary;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
+  }
+
+  .glass-effect {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  .animate-fade-in-up {
+    @apply animate-in slide-in-from-bottom-4 fade-in duration-700;
+  }
+
+  .animate-fade-in-down {
+    @apply animate-in slide-in-from-top-4 fade-in duration-700;
+  }
+
+  .animate-fade-in-left {
+    @apply animate-in slide-in-from-left-4 fade-in duration-700;
+  }
+
+  .animate-fade-in-right {
+    @apply animate-in slide-in-from-right-4 fade-in duration-700;
+  }
+
+  /* Futuristic Login Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+
+  @keyframes particle-float {
+    0% { transform: translate(0, 100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(100px, -100vh) rotate(360deg); opacity: 0; }
+  }
+
+  @keyframes cyber-grid {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
+  }
+
+  @keyframes neon-flicker {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    2%, 8%, 10%, 12%, 14%, 16%, 18% { opacity: 0.8; filter: brightness(0.8); }
+    4%, 6% { opacity: 1; filter: brightness(1.2); }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  .animate-particle-float {
+    animation: particle-float linear infinite;
+  }
+
+  .animate-cyber-grid {
+    animation: cyber-grid 20s linear infinite;
+  }
+
+  .animate-neon-flicker {
+    animation: neon-flicker 2s linear infinite;
+  }
+
+  /* Cyber Grid Pattern */
+  .cyber-grid {
+    background-image: 
+      linear-gradient(rgba(79, 70, 229, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79, 70, 229, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Glassmorphism */
+  .glass-morphism {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  }
+
+  /* Neon Glow Effects */
+  .neon-glow-blue {
+    box-shadow: 
+      0 0 5px hsl(var(--primary)),
+      0 0 20px hsl(var(--primary)),
+      0 0 35px hsl(var(--primary)),
+      0 0 50px hsl(var(--primary));
+  }
+
+  .neon-glow-orange {
+    box-shadow: 
+      0 0 5px hsl(var(--secondary)),
+      0 0 20px hsl(var(--secondary)),
+      0 0 35px hsl(var(--secondary)),
+      0 0 50px hsl(var(--secondary));
+  }
+}
