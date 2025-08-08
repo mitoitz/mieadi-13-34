@@ -1431,7 +1431,7 @@ export type Database = {
           congregation_id: string | null
           cpf: string | null
           created_at: string
-          email: string
+          email: string | null
           full_name: string
           id: string
           phone: string | null
@@ -1451,7 +1451,7 @@ export type Database = {
           congregation_id?: string | null
           cpf?: string | null
           created_at?: string
-          email: string
+          email?: string | null
           full_name: string
           id?: string
           phone?: string | null
@@ -1471,7 +1471,7 @@ export type Database = {
           congregation_id?: string | null
           cpf?: string | null
           created_at?: string
-          email?: string
+          email?: string | null
           full_name?: string
           id?: string
           phone?: string | null
