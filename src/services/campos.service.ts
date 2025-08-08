@@ -22,13 +22,7 @@ export const camposService = {
   async listar() {
     const { data, error } = await supabase
       .from('fields')
-      .select(`
-        *,
-        profiles:responsible_id (
-          id,
-          full_name
-        )
-      `)
+      .select('*')
       .order('name');
     
     if (error) throw error;
