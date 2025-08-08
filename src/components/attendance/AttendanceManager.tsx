@@ -201,9 +201,12 @@ export const AttendanceManager = () => {
         .eq('status', 'ativa')
         .limit(1);
 
-      // Usar estudante e turma existentes ou o usuário atual
-      const currentUser = (await supabase.auth.getUser()).data.user;
-      let defaultStudentId = students?.[0]?.id || currentUser?.id;
+      // Obter usuário atual (se houver) e fallback seguro via RPC
+      const { data: authUserRes } = await supabase.auth.getUser();
+      const { data: fallbackUserId } = await supabase.rpc('get_current_authenticated_user');
+
+      // Usar estudante existente, usuário autenticado ou fallback do sistema
+      let defaultStudentId = students?.[0]?.id || authUserRes?.user?.id || (fallbackUserId as string | undefined);
       let defaultClassId = classes?.[0]?.id;
 
       // Se não há turma, não é possível prosseguir
@@ -211,12 +214,9 @@ export const AttendanceManager = () => {
         throw new Error('❌ É necessário ter pelo menos uma turma ativa no sistema antes de importar frequências.');
       }
 
-      // Se não há estudante, usar o usuário atual
+      // Se não há estudante, abortar com mensagem clara
       if (!defaultStudentId) {
-        defaultStudentId = currentUser?.id;
-        if (!defaultStudentId) {
-          throw new Error('❌ É necessário estar logado para importar frequências.');
-        }
+        throw new Error('❌ Não foi possível identificar um aluno padrão. Faça login ou crie um perfil de aluno.');
       }
 
       // Processar o arquivo linha por linha
