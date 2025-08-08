@@ -113,9 +113,6 @@ export function UnifiedAttendanceControl({
             id,
             name,
             professor_id,
-            profiles!classes_professor_id_fkey (
-              full_name
-            ),
             class_subjects!inner (
               subject_id,
               subjects!inner (
@@ -191,7 +188,7 @@ export function UnifiedAttendanceControl({
           event_id,
           class_id,
           notes,
-          profiles!attendance_records_student_id_fkey (
+          student:profiles (
             id,
             full_name,
             cpf,
@@ -199,10 +196,10 @@ export function UnifiedAttendanceControl({
             role,
             badge_number
           ),
-          events (
+          event:events (
             title
           ),
-          classes (
+          class:classes (
             name
           )
         `)
@@ -220,9 +217,9 @@ export function UnifiedAttendanceControl({
       if (error) throw error;
 
       const records: AttendanceRecord[] = (data || []).map(record => {
-        const profile = Array.isArray(record.profiles) ? record.profiles[0] : record.profiles;
-        const event = Array.isArray(record.events) ? record.events[0] : record.events;
-        const classInfo = Array.isArray(record.classes) ? record.classes[0] : record.classes;
+        const profile = (record as any).student;
+        const event = (record as any).event;
+        const classInfo = (record as any).class;
         
         return {
           id: record.id,
