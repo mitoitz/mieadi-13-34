@@ -1289,6 +1289,175 @@ export type Database = {
         }
         Relationships: []
       }
+      legacy_attendance_staging: {
+        Row: {
+          check_in_time: string | null
+          check_out_time: string | null
+          created_at: string | null
+          legacy_attendance_id: string
+          legacy_event_id: string
+          notes: string | null
+          status: string
+          student_id: string
+          verification_method: string | null
+        }
+        Insert: {
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string | null
+          legacy_attendance_id: string
+          legacy_event_id: string
+          notes?: string | null
+          status?: string
+          student_id: string
+          verification_method?: string | null
+        }
+        Update: {
+          check_in_time?: string | null
+          check_out_time?: string | null
+          created_at?: string | null
+          legacy_attendance_id?: string
+          legacy_event_id?: string
+          notes?: string | null
+          status?: string
+          student_id?: string
+          verification_method?: string | null
+        }
+        Relationships: []
+      }
+      legacy_event_map: {
+        Row: {
+          canonical_event_id: string
+          created_at: string | null
+          legacy_event_id: string
+          matched_via: string | null
+        }
+        Insert: {
+          canonical_event_id: string
+          created_at?: string | null
+          legacy_event_id: string
+          matched_via?: string | null
+        }
+        Update: {
+          canonical_event_id?: string
+          created_at?: string | null
+          legacy_event_id?: string
+          matched_via?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legacy_event_map_canonical_event_id_fkey"
+            columns: ["canonical_event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legacy_events_staging: {
+        Row: {
+          class_id: string | null
+          created_by: string | null
+          description: string | null
+          end_datetime: string
+          event_type: string | null
+          inserted_at: string | null
+          legacy_event_id: string
+          location: string | null
+          start_datetime: string
+          status: string | null
+          title: string
+        }
+        Insert: {
+          class_id?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_datetime: string
+          event_type?: string | null
+          inserted_at?: string | null
+          legacy_event_id: string
+          location?: string | null
+          start_datetime: string
+          status?: string | null
+          title: string
+        }
+        Update: {
+          class_id?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_datetime?: string
+          event_type?: string | null
+          inserted_at?: string | null
+          legacy_event_id?: string
+          location?: string | null
+          start_datetime?: string
+          status?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      legacy_subject_map: {
+        Row: {
+          canonical_subject_id: string
+          created_at: string | null
+          legacy_subject_id: string
+          matched_via: string | null
+        }
+        Insert: {
+          canonical_subject_id: string
+          created_at?: string | null
+          legacy_subject_id: string
+          matched_via?: string | null
+        }
+        Update: {
+          canonical_subject_id?: string
+          created_at?: string | null
+          legacy_subject_id?: string
+          matched_via?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legacy_subject_map_canonical_subject_id_fkey"
+            columns: ["canonical_subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legacy_subjects_staging: {
+        Row: {
+          code: string | null
+          course_id: string | null
+          created_at: string | null
+          credits: number | null
+          description: string | null
+          legacy_subject_id: string
+          name: string
+          professor_id: string | null
+        }
+        Insert: {
+          code?: string | null
+          course_id?: string | null
+          created_at?: string | null
+          credits?: number | null
+          description?: string | null
+          legacy_subject_id: string
+          name: string
+          professor_id?: string | null
+        }
+        Update: {
+          code?: string | null
+          course_id?: string | null
+          created_at?: string | null
+          credits?: number | null
+          description?: string | null
+          legacy_subject_id?: string
+          name?: string
+          professor_id?: string | null
+        }
+        Relationships: []
+      }
       login_attempts: {
         Row: {
           attempt_time: string | null
@@ -2213,6 +2382,18 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      consolidate_legacy_data: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      consolidate_legacy_events: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      consolidate_legacy_subjects: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       create_admin_auth_user: {
         Args: { user_email: string; user_password?: string }
         Returns: Json
@@ -2248,6 +2429,15 @@ export type Database = {
       create_supabase_auth_for_profile: {
         Args: { user_email: string; user_password?: string }
         Returns: Json
+      }
+      event_fingerprint: {
+        Args: {
+          p_title: string
+          p_start: string
+          p_class_id: string
+          p_location: string
+        }
+        Returns: string
       }
       generate_badge_number: {
         Args: Record<PropertyKey, never>
@@ -2425,6 +2615,10 @@ export type Database = {
       mark_communication_as_read: {
         Args: { communication_id: string; user_id: string }
         Returns: undefined
+      }
+      normalize_identifier_text: {
+        Args: { p_text: string }
+        Returns: string
       }
       reactivate_expired_absences: {
         Args: Record<PropertyKey, never>
