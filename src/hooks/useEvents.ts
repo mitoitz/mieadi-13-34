@@ -191,6 +191,17 @@ export function useEvents() {
       studentId: string; 
       studentName: string; 
     }) => {
+      // Validate event exists before inserting attendance
+      const { data: ev, error: evErr } = await supabase
+        .from('events')
+        .select('id')
+        .eq('id', eventId)
+        .maybeSingle();
+      if (evErr) throw evErr;
+      if (!ev) {
+        throw new Error('Evento não encontrado ou removido. Atualize a lista de eventos e tente novamente.');
+      }
+
       const { data, error } = await supabase
         .from('attendance_records')
         .insert([{
@@ -203,7 +214,6 @@ export function useEvents() {
         }])
         .select()
         .single();
-
       if (error) throw error;
       return data;
     },

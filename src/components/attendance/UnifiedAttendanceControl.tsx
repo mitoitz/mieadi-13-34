@@ -455,6 +455,27 @@ export function UnifiedAttendanceControl({
       const selectedSubjectData = selectedSubject ? todaySubjects.find(s => s.id === selectedSubject) : null;
       const selectedEventData = selectedEvent ? availableEvents.find(e => e.id === selectedEvent) : null;
       
+      // Validate event exists if provided
+      if (currentEventId) {
+        const { data: ev, error: evErr } = await supabase
+          .from('events')
+          .select('id')
+          .eq('id', currentEventId)
+          .maybeSingle();
+        if (evErr) {
+          console.error('Erro ao validar evento:', evErr);
+          throw evErr;
+        }
+        if (!ev) {
+          toast({
+            title: "Evento inválido",
+            description: "O evento selecionado não existe mais. Recarregue e selecione um evento válido.",
+            variant: "destructive"
+          });
+          return;
+        }
+      }
+      
       const attendanceData = {
         student_id: person.id,
         event_id: currentEventId || null,

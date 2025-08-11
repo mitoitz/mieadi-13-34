@@ -127,6 +127,22 @@ export const eventsService = {
   async registrarFrequencia(registro: Omit<AttendanceRecord, 'id' | 'created_at' | 'updated_at'>): Promise<AttendanceRecord> {
     console.log('🔄 Registrando frequência:', registro);
     
+    // Validar existência do evento (se fornecido)
+    if (registro.event_id) {
+      const { data: ev, error: evErr } = await supabase
+        .from('events')
+        .select('id')
+        .eq('id', registro.event_id)
+        .maybeSingle();
+      if (evErr) {
+        console.error('❌ Erro ao validar evento:', evErr);
+        throw evErr;
+      }
+      if (!ev) {
+        throw new Error('Evento não encontrado ou removido. Atualize e selecione um evento válido.');
+      }
+    }
+    
     const { data, error } = await supabase
       .from('attendance_records')
       .insert(registro)
