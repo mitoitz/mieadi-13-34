@@ -127,22 +127,35 @@ export const eventsService = {
   async registrarFrequencia(registro: Omit<AttendanceRecord, 'id' | 'created_at' | 'updated_at'>): Promise<AttendanceRecord> {
     console.log('🔄 Registrando frequência:', registro);
     
-    // Validar existência do evento (se fornecido)
+    // Se tiver event_id, usar RPC (deduplicação/validação)
     if (registro.event_id) {
-      const { data: ev, error: evErr } = await supabase
-        .from('events')
-        .select('id')
-        .eq('id', registro.event_id)
-        .maybeSingle();
-      if (evErr) {
-        console.error('❌ Erro ao validar evento:', evErr);
-        throw evErr;
+      const { data: rpcId, error: rpcErr } = await supabase.rpc(
+        'insert_attendance_by_legacy_or_fingerprint',
+        {
+          p_student_id: registro.student_id,
+          p_status: registro.status || 'presente',
+          p_verification_method: registro.verification_method || 'manual',
+          p_check_in_time: registro.check_in_time || new Date().toISOString(),
+          p_check_out_time: registro.check_out_time || null,
+          p_notes: registro.notes || null,
+          p_event_id: registro.event_id
+        }
+      );
+      if (rpcErr) {
+        console.error('❌ Erro ao inserir via RPC:', rpcErr);
+        throw rpcErr;
       }
-      if (!ev) {
-        throw new Error('Evento não encontrado ou removido. Atualize e selecione um evento válido.');
-      }
+      const { data: fullRecord, error: fetchErr } = await supabase
+        .from('attendance_records')
+        .select('*')
+        .eq('id', rpcId as string)
+        .single();
+      if (fetchErr) throw fetchErr;
+      console.log('✅ Frequência registrada (RPC):', fullRecord);
+      return fullRecord as AttendanceRecord;
     }
     
+    // Sem event_id: inserir diretamente (ex.: presença por turma)
     const { data, error } = await supabase
       .from('attendance_records')
       .insert(registro)
@@ -155,7 +168,7 @@ export const eventsService = {
     }
     
     console.log('✅ Frequência registrada:', data);
-    return data;
+    return data as AttendanceRecord;
   },
 
   async buscarFrequenciaEvento(eventId: string): Promise<AttendanceRecord[]> {

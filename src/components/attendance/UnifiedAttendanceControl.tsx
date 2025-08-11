@@ -495,21 +495,45 @@ export function UnifiedAttendanceControl({
 
       console.log('Registrando presença:', attendanceData);
 
-      const { data: insertedData, error } = await supabase
-        .from('attendance_records')
-        .insert(attendanceData)
-        .select();
+      let insertedId: string | null = null;
 
-      if (error) {
-        console.error('Erro ao inserir registro:', error);
-        throw error;
+      if (currentEventId) {
+        // Use RPC to ensure event handling and deduplication
+        const { data: rpcId, error: rpcErr } = await supabase.rpc(
+          'insert_attendance_by_legacy_or_fingerprint',
+          {
+            p_student_id: person.id,
+            p_status: 'presente',
+            p_verification_method: method,
+            p_check_in_time: new Date().toISOString(),
+            p_notes: attendanceData.notes,
+            p_event_id: currentEventId
+          }
+        );
+        if (rpcErr) {
+          console.error('Erro ao inserir via RPC:', rpcErr);
+          throw rpcErr;
+        }
+        insertedId = rpcId as string;
+      } else {
+        // Class-only attendance (sem evento): inserir diretamente
+        const { data: insertedData, error } = await supabase
+          .from('attendance_records')
+          .insert(attendanceData)
+          .select()
+          .single();
+        if (error) {
+          console.error('Erro ao inserir registro:', error);
+          throw error;
+        }
+        insertedId = insertedData?.id || null;
       }
 
-      console.log('Presença registrada com sucesso:', insertedData);
+      console.log('Presença registrada com sucesso:', insertedId);
 
       // Create new record for UI
       const newRecord: AttendanceRecord = {
-        id: insertedData[0]?.id || `temp-${Date.now()}`,
+        id: insertedId || `temp-${Date.now()}`,
         person,
         method,
         timestamp: new Date().toISOString(),
@@ -517,7 +541,6 @@ export function UnifiedAttendanceControl({
         subject_name: selectedSubjectData?.name,
         event_title: selectedEventData?.title
       };
-
       const updatedRecords = [newRecord, ...attendanceRecords];
       setAttendanceRecords(updatedRecords);
       onAttendanceUpdate?.(updatedRecords);

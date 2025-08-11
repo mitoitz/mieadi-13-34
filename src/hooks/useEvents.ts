@@ -191,31 +191,17 @@ export function useEvents() {
       studentId: string; 
       studentName: string; 
     }) => {
-      // Validate event exists before inserting attendance
-      const { data: ev, error: evErr } = await supabase
-        .from('events')
-        .select('id')
-        .eq('id', eventId)
-        .maybeSingle();
-      if (evErr) throw evErr;
-      if (!ev) {
-        throw new Error('Evento não encontrado ou removido. Atualize a lista de eventos e tente novamente.');
-      }
-
-      const { data, error } = await supabase
-        .from('attendance_records')
-        .insert([{
-          event_id: eventId,
-          student_id: studentId,
-          status: 'presente',
-          check_in_time: new Date().toISOString(),
-          verification_method: 'manual',
-          attendance_type: 'presenca'
-        }])
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
+      // Inserir via RPC para deduplicação e validação
+      const { data: rpcId, error: rpcErr } = await supabase.rpc(
+        'insert_attendance_by_legacy_or_fingerprint',
+        {
+          p_student_id: studentId,
+          p_status: 'presente',
+          p_verification_method: 'manual',
+          p_check_in_time: new Date().toISOString(),
+          p_event_id: eventId
+        }
+      );
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['event-attendances'] });
