@@ -2547,6 +2547,24 @@ export type Database = {
         Args: { plain_password: string }
         Returns: string
       }
+      insert_attendance_by_legacy_or_fingerprint: {
+        Args: {
+          p_student_id: string
+          p_status?: string
+          p_verification_method?: string
+          p_check_in_time?: string
+          p_check_out_time?: string
+          p_notes?: string
+          p_event_id?: string
+          p_legacy_event_id?: string
+          p_title?: string
+          p_start?: string
+          p_end?: string
+          p_location?: string
+          p_class_id?: string
+        }
+        Returns: string
+      }
       is_admin_or_coordinator: {
         Args: Record<PropertyKey, never>
         Returns: boolean
@@ -2668,6 +2686,20 @@ export type Database = {
       system_needs_setup: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      upsert_event_by_fingerprint: {
+        Args: {
+          p_title: string
+          p_start: string
+          p_end: string
+          p_location?: string
+          p_class_id?: string
+          p_event_type?: string
+          p_status?: string
+          p_created_by?: string
+          p_legacy_event_id?: string
+        }
+        Returns: string
       }
       user_has_permission: {
         Args: { permission_path: string; action: string }
