@@ -131,6 +131,39 @@ export function useEvents() {
   // Criar evento
   const createEventMutation = useMutation({
     mutationFn: async (eventData: Omit<Event, 'id' | 'created_at' | 'updated_at'>) => {
+      // 1) Verificar se já existe evento com mesmo title + start_datetime
+      const { data: existing, error: findError } = await supabase
+        .from('events')
+        .select(`
+          id,
+          title,
+          description,
+          start_datetime,
+          end_datetime,
+          location,
+          max_attendees,
+          created_by,
+          created_at,
+          updated_at,
+          class_id,
+          event_type,
+          status
+        `)
+        .eq('title', eventData.title)
+        .eq('start_datetime', eventData.start_datetime)
+        .maybeSingle();
+
+      if (findError) {
+        console.error('Erro ao verificar evento existente:', findError);
+        throw findError;
+      }
+
+      if (existing) {
+        console.log('↩️ Usando evento existente (title + start_datetime):', existing.id);
+        return existing;
+      }
+
+      // 2) Não existe: criar normalmente
       // Buscar perfil do usuário logado para obter o UUID correto
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
@@ -151,7 +184,7 @@ export function useEvents() {
           end_datetime: eventData.end_datetime,
           location: eventData.location,
           max_attendees: eventData.max_attendees,
-          created_by: profile.id, // Usar UUID do perfil do usuário
+          created_by: profile.id,
           event_type: eventData.event_type || 'evento',
           status: eventData.status || 'agendado',
           class_id: eventData.class_id || null

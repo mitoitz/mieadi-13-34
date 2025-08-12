@@ -87,6 +87,25 @@ export const eventsService = {
   async criar(evento: Omit<Event, 'id' | 'created_at' | 'updated_at'>): Promise<Event> {
     console.log('🔄 Criando evento:', evento);
     
+    // 1) Verificar duplicidade por title + start_datetime
+    const { data: existing, error: findError } = await supabase
+      .from('events')
+      .select('*')
+      .eq('title', evento.title)
+      .eq('start_datetime', evento.start_datetime)
+      .maybeSingle();
+
+    if (findError) {
+      console.error('❌ Erro ao verificar evento existente:', findError);
+      throw findError;
+    }
+
+    if (existing) {
+      console.log('↩️ Usando evento existente (title + start_datetime):', existing.id);
+      return existing as Event;
+    }
+
+    // 2) Não existe: criar normalmente
     const { data, error } = await supabase
       .from('events')
       .insert(evento)
