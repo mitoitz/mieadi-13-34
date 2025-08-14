@@ -88,7 +88,7 @@ export const useCPFAuth = () => {
     try {
       console.log('🔄 Chamando set_user_pin RPC...');
       const { data, error } = await supabase
-        .rpc('set_user_pin', { input_cpf: userCpf, new_pin: pin });
+        .rpc('set_user_pin', { input_cpf: userCpf, new_pin: parseInt(pin) });
 
       console.log('📊 Resultado set_user_pin:', { data, error });
 

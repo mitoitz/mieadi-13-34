@@ -2344,6 +2344,18 @@ export type Database = {
         Args: { user_email: string; user_password: string }
         Returns: Json
       }
+      bulk_insert_attendances: {
+        Args: { records: Json }
+        Returns: {
+          id: string
+          student_id: string
+          class_id: string
+          session_id: string
+          date: string
+          status: string
+          notes: string
+        }[]
+      }
       calculate_student_attendance: {
         Args: { student_uuid: string; class_uuid?: string }
         Returns: number
@@ -2676,8 +2688,11 @@ export type Database = {
         Returns: Json
       }
       set_user_pin: {
-        Args: { input_cpf: string; new_pin: string }
-        Returns: Json
+        Args:
+          | { cpf_raw: string; pin_raw: string }
+          | { input_cpf: string; new_pin: number }
+          | { user_id: string; new_pin: number }
+        Returns: undefined
       }
       setup_user_pin: {
         Args: { user_id: string; pin_code: string }
