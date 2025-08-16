@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -236,6 +236,89 @@ export type Database = {
           },
         ]
       }
+      attendance_events: {
+        Row: {
+          active: boolean | null
+          congregation_id: string | null
+          course_id: string | null
+          created_at: string | null
+          created_by: string | null
+          date: string
+          description: string | null
+          end_time: string | null
+          event_type: string
+          id: string
+          instructor_id: string | null
+          location: string | null
+          name: string
+          start_time: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          congregation_id?: string | null
+          course_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          date: string
+          description?: string | null
+          end_time?: string | null
+          event_type?: string
+          id?: string
+          instructor_id?: string | null
+          location?: string | null
+          name: string
+          start_time?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          congregation_id?: string | null
+          course_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          date?: string
+          description?: string | null
+          end_time?: string | null
+          event_type?: string
+          id?: string
+          instructor_id?: string | null
+          location?: string | null
+          name?: string
+          start_time?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_events_congregation_id_fkey"
+            columns: ["congregation_id"]
+            isOneToOne: false
+            referencedRelation: "congregations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_events_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_events_instructor_id_fkey"
+            columns: ["instructor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       attendance_receipts: {
         Row: {
           attendance_record_id: string | null
@@ -387,6 +470,20 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_verified_by_fkey"
+            columns: ["verified_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -932,6 +1029,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "classes_professor_id_fkey"
+            columns: ["professor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "classes_subject_id_fkey"
             columns: ["subject_id"]
             isOneToOne: false
@@ -1106,6 +1210,13 @@ export type Database = {
             referencedRelation: "courses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "enrollments_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       events: {
@@ -1170,6 +1281,47 @@ export type Database = {
           },
         ]
       }
+      facial_recognition: {
+        Row: {
+          active: boolean | null
+          confidence_threshold: number | null
+          created_at: string | null
+          face_encoding: string
+          face_image_url: string | null
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          active?: boolean | null
+          confidence_threshold?: number | null
+          created_at?: string | null
+          face_encoding: string
+          face_image_url?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          active?: boolean | null
+          confidence_threshold?: number | null
+          created_at?: string | null
+          face_encoding?: string
+          face_image_url?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "facial_recognition_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fields: {
         Row: {
           created_at: string | null
@@ -1195,7 +1347,15 @@ export type Database = {
           responsible_id?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fields_responsible_id_fkey"
+            columns: ["responsible_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       grades: {
         Row: {
@@ -1862,6 +2022,41 @@ export type Database = {
         }
         Relationships: []
       }
+      qr_codes: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          id: string
+          qr_code_data: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          qr_code_data: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          qr_code_data?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qr_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       receipt_templates: {
         Row: {
           created_at: string | null
@@ -2347,21 +2542,21 @@ export type Database = {
       bulk_insert_attendances: {
         Args: { records: Json }
         Returns: {
-          id: string
-          student_id: string
           class_id: string
-          session_id: string
           date: string
-          status: string
+          id: string
           notes: string
+          session_id: string
+          status: string
+          student_id: string
         }[]
       }
       calculate_student_attendance: {
-        Args: { student_uuid: string; class_uuid?: string }
+        Args: { class_uuid?: string; student_uuid: string }
         Returns: number
       }
       calculate_student_average: {
-        Args: { student_uuid: string; class_uuid?: string }
+        Args: { class_uuid?: string; student_uuid: string }
         Returns: number
       }
       can_manage_courses: {
@@ -2370,10 +2565,10 @@ export type Database = {
       }
       can_mark_attendance: {
         Args: {
-          p_student_id: string
           p_class_id?: string
-          p_event_id?: string
           p_date?: string
+          p_event_id?: string
+          p_student_id: string
         }
         Returns: boolean
       }
@@ -2383,8 +2578,8 @@ export type Database = {
       }
       check_rate_limit: {
         Args: {
-          p_identifier: string
           p_action_type: string
+          p_identifier: string
           p_max_attempts?: number
           p_window_minutes?: number
         }
@@ -2444,10 +2639,10 @@ export type Database = {
       }
       event_fingerprint: {
         Args: {
-          p_title: string
-          p_start: string
           p_class_id: string
           p_location: string
+          p_start: string
+          p_title: string
         }
         Returns: string
       }
@@ -2471,6 +2666,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      generate_unique_qr_code: {
+        Args: { p_user_id: string }
+        Returns: string
+      }
       generate_validation_code: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -2478,43 +2677,101 @@ export type Database = {
       get_all_people: {
         Args: Record<PropertyKey, never>
         Returns: {
-          id: string
-          full_name: string
+          badge_number: string
+          congregation_name: string
           cpf: string
           email: string
-          phone: string
-          role: Database["public"]["Enums"]["user_role"]
-          status: Database["public"]["Enums"]["user_status"]
-          qr_code: string
-          badge_number: string
-          photo_url: string
-          congregation_name: string
           field_name: string
+          full_name: string
+          id: string
+          phone: string
+          photo_url: string
+          qr_code: string
+          role: Database["public"]["Enums"]["user_role"]
+          status: string
+        }[]
+      }
+      get_attendance_records_with_student: {
+        Args: { limit_records?: number }
+        Returns: {
+          attendance_type: string
+          check_in_time: string
+          check_out_time: string
+          event_id: string
+          id: string
+          notes: string
+          status: string
+          student_id: string
+          student_name: string
+          verification_method: string
         }[]
       }
       get_attendance_summary: {
         Args: {
-          p_start_date?: string
-          p_end_date?: string
           p_class_id?: string
+          p_end_date?: string
           p_event_id?: string
+          p_start_date?: string
         }
         Returns: {
-          id: string
-          student_id: string
-          student_name: string
-          student_cpf: string
-          badge_number: string
-          class_id: string
-          class_name: string
-          event_id: string
-          event_title: string
-          status: string
           attendance_type: string
-          verification_method: string
+          badge_number: string
           check_in_time: string
           check_out_time: string
+          class_id: string
+          class_name: string
           created_at: string
+          event_id: string
+          event_title: string
+          id: string
+          status: string
+          student_cpf: string
+          student_id: string
+          student_name: string
+          verification_method: string
+        }[]
+      }
+      get_available_classes: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          name: string
+          professor_name: string
+          schedule: string
+          status: string
+        }[]
+      }
+      get_class_details: {
+        Args: { class_uuid: string }
+        Returns: {
+          congregation_id: string
+          end_date: string
+          enrolled_count: number
+          id: string
+          max_students: number
+          name: string
+          professor_id: string
+          professor_name: string
+          schedule: string
+          start_date: string
+          status: string
+          subject_id: string
+        }[]
+      }
+      get_classes_with_professor: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          congregation_id: string
+          end_date: string
+          id: string
+          max_students: number
+          name: string
+          professor_id: string
+          professor_name: string
+          schedule: string
+          start_date: string
+          status: string
+          subject_id: string
         }[]
       }
       get_current_authenticated_user: {
@@ -2525,25 +2782,29 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_dashboard_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       get_people_paginated: {
         Args: {
-          page_offset?: number
           page_limit?: number
+          page_offset?: number
           search_term?: string
         }
         Returns: {
-          id: string
-          full_name: string
+          badge_number: string
+          congregation_name: string
           cpf: string
           email: string
+          field_name: string
+          full_name: string
+          id: string
           phone: string
+          photo_url: string
+          qr_code: string
           role: Database["public"]["Enums"]["user_role"]
           status: Database["public"]["Enums"]["user_status"]
-          qr_code: string
-          badge_number: string
-          photo_url: string
-          congregation_name: string
-          field_name: string
           total_count: number
         }[]
       }
@@ -2561,19 +2822,19 @@ export type Database = {
       }
       insert_attendance_by_legacy_or_fingerprint: {
         Args: {
-          p_student_id: string
-          p_status?: string
-          p_verification_method?: string
           p_check_in_time?: string
           p_check_out_time?: string
-          p_notes?: string
+          p_class_id?: string
+          p_end?: string
           p_event_id?: string
           p_legacy_event_id?: string
-          p_title?: string
-          p_start?: string
-          p_end?: string
           p_location?: string
-          p_class_id?: string
+          p_notes?: string
+          p_start?: string
+          p_status?: string
+          p_student_id: string
+          p_title?: string
+          p_verification_method?: string
         }
         Returns: string
       }
@@ -2598,7 +2859,7 @@ export type Database = {
         Returns: boolean
       }
       is_person_absent: {
-        Args: { person_uuid: string; check_date?: string }
+        Args: { check_date?: string; person_uuid: string }
         Returns: boolean
       }
       is_secretary: {
@@ -2615,30 +2876,30 @@ export type Database = {
       }
       log_authentication_event: {
         Args: {
-          p_user_id?: string
+          p_additional_data?: Json
           p_event_type?: string
           p_ip_address?: string
-          p_user_agent?: string
           p_success?: boolean
-          p_additional_data?: Json
+          p_user_agent?: string
+          p_user_id?: string
         }
         Returns: undefined
       }
       log_login_attempt: {
         Args: {
           p_email: string
-          p_success: boolean
           p_ip_address?: unknown
+          p_success: boolean
           p_user_agent?: string
         }
         Returns: undefined
       }
       log_security_event: {
         Args: {
-          event_type: string
-          event_description: string
-          risk_level?: string
           additional_data?: Json
+          event_description: string
+          event_type: string
+          risk_level?: string
         }
         Returns: undefined
       }
@@ -2654,6 +2915,20 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: number
       }
+      register_attendance: {
+        Args: {
+          p_event_id: string
+          p_method: string
+          p_notes?: string
+          p_registered_by?: string
+          p_user_id: string
+        }
+        Returns: {
+          attendance_id: string
+          message: string
+          success: boolean
+        }[]
+      }
       reset_pin_attempts_if_expired: {
         Args: { user_id: string }
         Returns: undefined
@@ -2663,39 +2938,40 @@ export type Database = {
         Returns: boolean
       }
       reset_user_pin_admin: {
-        Args: { target_cpf: string; new_pin: string; admin_user_id: string }
+        Args: { admin_user_id: string; new_pin: string; target_cpf: string }
+        Returns: Json
+      }
+      reset_user_pin_by_cpf: {
+        Args: { admin_user_id?: string; new_pin: string; target_cpf: string }
         Returns: Json
       }
       search_people: {
         Args: { search_term: string }
         Returns: {
-          id: string
-          full_name: string
+          badge_number: string
+          congregation_name: string
           cpf: string
           email: string
-          phone: string
-          role: Database["public"]["Enums"]["user_role"]
-          status: Database["public"]["Enums"]["user_status"]
-          qr_code: string
-          badge_number: string
-          photo_url: string
-          congregation_name: string
           field_name: string
+          full_name: string
+          id: string
+          phone: string
+          photo_url: string
+          qr_code: string
+          role: Database["public"]["Enums"]["user_role"]
+          status: string
         }[]
       }
       set_two_factor_pin: {
-        Args: { user_id: string; new_pin: string }
+        Args: { new_pin: string; user_id: string }
         Returns: Json
       }
       set_user_pin: {
-        Args:
-          | { cpf_raw: string; pin_raw: string }
-          | { input_cpf: string; new_pin: number }
-          | { user_id: string; new_pin: number }
-        Returns: undefined
+        Args: { input_cpf: string; new_pin: string }
+        Returns: Json
       }
       setup_user_pin: {
-        Args: { user_id: string; pin_code: string }
+        Args: { pin_code: string; user_id: string }
         Returns: boolean
       }
       system_needs_setup: {
@@ -2704,24 +2980,24 @@ export type Database = {
       }
       upsert_event_by_fingerprint: {
         Args: {
-          p_title: string
-          p_start: string
-          p_end: string
-          p_location?: string
           p_class_id?: string
-          p_event_type?: string
-          p_status?: string
           p_created_by?: string
+          p_end: string
+          p_event_type?: string
           p_legacy_event_id?: string
+          p_location?: string
+          p_start: string
+          p_status?: string
+          p_title: string
         }
         Returns: string
       }
       user_has_permission: {
-        Args: { permission_path: string; action: string }
+        Args: { action: string; permission_path: string }
         Returns: boolean
       }
       verify_two_factor_pin: {
-        Args: { user_id: string; pin_input: string }
+        Args: { pin_input: string; user_id: string }
         Returns: Json
       }
       verify_user_pin: {
