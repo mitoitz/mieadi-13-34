@@ -12,7 +12,7 @@ export const testPinSetup = async (cpf: string, pin: string) => {
   try {
     const { data, error } = await supabase.rpc('set_user_pin', {
       input_cpf: cpf,
-      new_pin: parseInt(pin)
+      new_pin: pin
     });
     
     console.log('📊 Resultado:');
@@ -73,7 +73,7 @@ export const testDirectRPC = async () => {
   try {
     const { data, error } = await supabase.rpc('set_user_pin', {
       input_cpf: '04816954350',
-      new_pin: 1234
+      new_pin: '1234'
     });
     
     console.log('📊 Resultado direto:');
