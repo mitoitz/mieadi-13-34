@@ -1,5 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
-import { executeWithUserContext } from '@/lib/auth-context';
+import { setUserContext } from '@/lib/auth-context';
 
 class PessoasService {
   // Adicionar headers de autenticação se disponível
@@ -167,47 +167,104 @@ export const pessoasService = {
   },
 
   async criar(pessoa: Omit<NovaPessoa, 'id'>) {
-    return executeWithUserContext(async () => {
+    console.log('🔄 Criando pessoa:', pessoa);
+    
+    try {
+      // Configurar contexto de autenticação
+      await setUserContext();
+      
       // Remove campos que não existem na tabela profiles
       const { password, ...profileData } = pessoa as any;
       
-      const { data, error } = await supabase
-        .from('profiles')
-        .insert(profileData)
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
-    }, 'criação de pessoa');
-  },
-
-  async atualizar(id: string, updates: Partial<NovaPessoa>) {
-    return executeWithUserContext(async () => {
-      // Remove campos que não existem na tabela profiles
-      const { password, ...profileUpdates } = updates as any;
+      // Garantir que o ID seja gerado automaticamente se não fornecido
+      const dataToInsert = {
+        ...profileData,
+        id: profileData.id || undefined, // Deixar que o Supabase gere se não fornecido
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      
+      console.log('📤 Dados para inserção:', dataToInsert);
       
       const { data, error } = await supabase
         .from('profiles')
-        .update(profileUpdates)
+        .insert(dataToInsert)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('❌ Erro na inserção:', error);
+        throw error;
+      }
+      
+      console.log('✅ Pessoa criada:', data);
+      return data;
+    } catch (error) {
+      console.error('❌ Erro no serviço de criação:', error);
+      throw error;
+    }
+  },
+
+  async atualizar(id: string, updates: Partial<NovaPessoa>) {
+    console.log('🔄 Atualizando pessoa:', id, updates);
+    
+    try {
+      // Configurar contexto de autenticação
+      await setUserContext();
+      
+      // Remove campos que não existem na tabela profiles
+      const { password, ...profileUpdates } = updates as any;
+      
+      // Adicionar timestamp de atualização
+      const dataToUpdate = {
+        ...profileUpdates,
+        updated_at: new Date().toISOString()
+      };
+      
+      console.log('📤 Dados para atualização:', dataToUpdate);
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(dataToUpdate)
         .eq('id', id)
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Erro na atualização:', error);
+        throw error;
+      }
+      
+      console.log('✅ Pessoa atualizada:', data);
       return data;
-    }, 'atualização de pessoa');
+    } catch (error) {
+      console.error('❌ Erro no serviço de atualização:', error);
+      throw error;
+    }
   },
 
   async deletar(id: string) {
-    return executeWithUserContext(async () => {
+    console.log('🔄 Deletando pessoa:', id);
+    
+    try {
+      // Configurar contexto de autenticação
+      await setUserContext();
+      
       const { error } = await supabase
         .from('profiles')
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
-    }, 'exclusão de pessoa');
+      if (error) {
+        console.error('❌ Erro na exclusão:', error);
+        throw error;
+      }
+      
+      console.log('✅ Pessoa deletada com sucesso');
+    } catch (error) {
+      console.error('❌ Erro no serviço de exclusão:', error);
+      throw error;
+    }
   },
 
   async buscarPorCPF(cpf: string) {

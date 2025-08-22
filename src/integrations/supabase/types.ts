@@ -1908,6 +1908,7 @@ export type Database = {
           absence_reason: string | null
           absence_start_date: string | null
           address: string | null
+          avatar_url: string | null
           badge_number: string | null
           can_edit: boolean | null
           congregation_id: string | null
@@ -1944,6 +1945,7 @@ export type Database = {
           absence_reason?: string | null
           absence_start_date?: string | null
           address?: string | null
+          avatar_url?: string | null
           badge_number?: string | null
           can_edit?: boolean | null
           congregation_id?: string | null
@@ -1980,6 +1982,7 @@ export type Database = {
           absence_reason?: string | null
           absence_start_date?: string | null
           address?: string | null
+          avatar_url?: string | null
           badge_number?: string | null
           can_edit?: boolean | null
           congregation_id?: string | null
