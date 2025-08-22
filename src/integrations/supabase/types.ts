@@ -1907,6 +1907,7 @@ export type Database = {
           absence_end_date: string | null
           absence_reason: string | null
           absence_start_date: string | null
+          address: string | null
           badge_number: string | null
           can_edit: boolean | null
           congregation_id: string | null
@@ -1929,14 +1930,10 @@ export type Database = {
           pin_attempts: number | null
           pin_hash: string | null
           pin_locked_until: string | null
-          privacy_policy_accepted: boolean | null
-          privacy_policy_accepted_at: string | null
           qr_code: string | null
           role: Database["public"]["Enums"]["user_role"]
           status: string | null
           tela_permitida: string | null
-          terms_accepted: boolean | null
-          terms_accepted_at: string | null
           two_factor_enabled: boolean | null
           two_factor_pin: string | null
           two_factor_secret: string | null
@@ -1946,6 +1943,7 @@ export type Database = {
           absence_end_date?: string | null
           absence_reason?: string | null
           absence_start_date?: string | null
+          address?: string | null
           badge_number?: string | null
           can_edit?: boolean | null
           congregation_id?: string | null
@@ -1968,14 +1966,10 @@ export type Database = {
           pin_attempts?: number | null
           pin_hash?: string | null
           pin_locked_until?: string | null
-          privacy_policy_accepted?: boolean | null
-          privacy_policy_accepted_at?: string | null
           qr_code?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           status?: string | null
           tela_permitida?: string | null
-          terms_accepted?: boolean | null
-          terms_accepted_at?: string | null
           two_factor_enabled?: boolean | null
           two_factor_pin?: string | null
           two_factor_secret?: string | null
@@ -1985,6 +1979,7 @@ export type Database = {
           absence_end_date?: string | null
           absence_reason?: string | null
           absence_start_date?: string | null
+          address?: string | null
           badge_number?: string | null
           can_edit?: boolean | null
           congregation_id?: string | null
@@ -2007,14 +2002,10 @@ export type Database = {
           pin_attempts?: number | null
           pin_hash?: string | null
           pin_locked_until?: string | null
-          privacy_policy_accepted?: boolean | null
-          privacy_policy_accepted_at?: string | null
           qr_code?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           status?: string | null
           tela_permitida?: string | null
-          terms_accepted?: boolean | null
-          terms_accepted_at?: string | null
           two_factor_enabled?: boolean | null
           two_factor_pin?: string | null
           two_factor_secret?: string | null
@@ -2654,6 +2645,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      generate_jwt_token: {
+        Args: { user_email: string; user_id: string; user_role: string }
+        Returns: string
+      }
       generate_qr_code: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -2812,6 +2807,10 @@ export type Database = {
         Args: { user_id: string }
         Returns: string
       }
+      has_active_supabase_session: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       has_role_permission: {
         Args: { required_role: Database["public"]["Enums"]["user_role"] }
         Returns: boolean
@@ -2843,7 +2842,11 @@ export type Database = {
         Returns: boolean
       }
       is_admin_user: {
-        Args: { user_id: string }
+        Args: Record<PropertyKey, never> | { user_id: string }
+        Returns: boolean
+      }
+      is_authentication_operation: {
+        Args: Record<PropertyKey, never>
         Returns: boolean
       }
       is_director_or_secretary: {
@@ -2866,6 +2869,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      is_secretary_user: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       is_self: {
         Args: { user_id: string }
         Returns: boolean
@@ -2873,6 +2880,29 @@ export type Database = {
       is_teacher: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      list_all_profiles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          badge_number: string
+          congregation_id: string
+          congregation_name: string
+          cpf: string
+          email: string
+          field_id: string
+          field_name: string
+          full_name: string
+          id: string
+          last_login: string
+          permissions: Json
+          phone: string
+          photo_url: string
+          qr_code: string
+          role: string
+          status: string
+          two_factor_enabled: boolean
+          updated_at: string
+        }[]
       }
       log_authentication_event: {
         Args: {
