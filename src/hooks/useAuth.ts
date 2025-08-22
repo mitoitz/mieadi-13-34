@@ -20,8 +20,6 @@ export interface User {
   photo_url?: string;
   tela_permitida?: string;
   can_edit?: boolean;
-  terms_accepted?: boolean;
-  privacy_policy_accepted?: boolean;
   two_factor_enabled?: boolean;
 }
 
@@ -69,8 +67,6 @@ export const useAuth = () => {
         photo_url: profile.photo_url,
         tela_permitida: profile.tela_permitida,
         can_edit: profile.can_edit,
-        terms_accepted: profile.terms_accepted,
-        privacy_policy_accepted: profile.privacy_policy_accepted,
         two_factor_enabled: profile.two_factor_enabled
       };
       

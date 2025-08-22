@@ -35,8 +35,6 @@ interface AuthResult {
     role: string;
     congregation_id?: string;
     photo_url?: string;
-    terms_accepted?: boolean;
-    privacy_policy_accepted?: boolean;
     two_factor_enabled?: boolean;
     permissions?: any;
   };

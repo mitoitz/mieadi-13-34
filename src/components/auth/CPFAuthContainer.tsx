@@ -2,9 +2,9 @@ import { useState } from "react";
 import { CPFLoginForm } from "./CPFLoginForm";
 import { PINSetupForm } from "./PINSetupForm";
 import { PINLoginForm } from "./PINLoginForm";
-import { TermsAndPrivacyDialog } from "./TermsAndPrivacyDialog";
 
-type AuthStep = 'cpf' | 'pin-setup' | 'pin-login' | 'terms';
+
+type AuthStep = 'cpf' | 'pin-setup' | 'pin-login';
 
 interface CPFAuthContainerProps {
   onLogin: (user: any) => void;
@@ -36,26 +36,9 @@ export function CPFAuthContainer({ onLogin }: CPFAuthContainerProps) {
 
   const handlePINVerified = (user: any) => {
     setCurrentUser(user);
-    
-    // Verificar se precisa aceitar termos
-    if (!user.terms_accepted || !user.privacy_policy_accepted) {
-      setCurrentStep('terms');
-      return;
-    }
-    
-    // Se já aceitou os termos, fazer login direto
     completeLogin(user);
   };
 
-  const handleTermsAccepted = () => {
-    if (currentUser) {
-      completeLogin({
-        ...currentUser,
-        terms_accepted: true,
-        privacy_policy_accepted: true
-      });
-    }
-  };
 
   const completeLogin = (user: any) => {
     // Preparar dados para o contexto de autenticação
@@ -74,8 +57,6 @@ export function CPFAuthContainer({ onLogin }: CPFAuthContainerProps) {
       photo_url: user.photo_url,
       tela_permitida: user.tela_permitida,
       can_edit: user.can_edit,
-      terms_accepted: user.terms_accepted,
-      privacy_policy_accepted: user.privacy_policy_accepted,
       two_factor_enabled: user.two_factor_enabled
     };
 
@@ -109,14 +90,6 @@ export function CPFAuthContainer({ onLogin }: CPFAuthContainerProps) {
         />
       )}
       
-      {currentStep === 'terms' && currentUser && (
-        <TermsAndPrivacyDialog 
-          isOpen={true}
-          onAccept={handleTermsAccepted}
-          userId={currentUser.id}
-          userName={currentUser.full_name}
-        />
-      )}
     </>
   );
 }
