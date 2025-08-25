@@ -206,26 +206,10 @@ export const pessoasService = {
   },
 
   async atualizar(id: string, updates: Partial<NovaPessoa>) {
-    console.log('🔄 Atualizando pessoa:', id, updates);
+    console.log('🔄 Iniciando atualização da pessoa:', id);
+    console.log('📝 Dados recebidos:', updates);
     
     try {
-      // Configurar contexto de autenticação
-      await setUserContext();
-      
-      // Verificar sessão atual
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      console.log('👤 Usuário atual:', user?.id, user?.email);
-      
-      if (authError) {
-        console.error('❌ Erro de autenticação:', authError);
-        throw new Error('Falha na autenticação');
-      }
-      
-      if (!user) {
-        console.error('❌ Usuário não autenticado');
-        throw new Error('Usuário não autenticado');
-      }
-      
       // Remove campos que não existem na tabela profiles
       const { password, ...profileUpdates } = updates as any;
       
@@ -235,39 +219,33 @@ export const pessoasService = {
         updated_at: new Date().toISOString()
       };
       
-      console.log('📤 Dados para atualização:', dataToUpdate);
-      console.log('🆔 ID do registro a ser atualizado:', id);
+      console.log('📤 Dados preparados para atualização:', dataToUpdate);
+      console.log('🆔 ID do registro:', id);
       
-      // Primeiro verificar se o registro existe e se o usuário pode vê-lo
-      const { data: existingData, error: selectError } = await supabase
-        .from('profiles')
-        .select('id, full_name, role')
-        .eq('id', id)
-        .single();
-      
-      if (selectError) {
-        console.error('❌ Erro ao verificar registro existente:', selectError);
-        throw new Error(`Erro ao localizar registro: ${selectError.message}`);
-      }
-      
-      console.log('📋 Registro existente encontrado:', existingData);
-      
+      // Fazer a atualização diretamente
       const { data, error } = await supabase
         .from('profiles')
         .update(dataToUpdate)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle(); // Usar maybeSingle para evitar erros se não encontrar
 
       if (error) {
-        console.error('❌ Erro na atualização:', error);
-        console.error('❌ Código do erro:', error.code);
-        console.error('❌ Detalhes do erro:', error.details);
-        console.error('❌ Hint do erro:', error.hint);
+        console.error('❌ Erro detalhado na atualização:', {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        });
         throw new Error(`Falha na atualização: ${error.message}`);
       }
       
-      console.log('✅ Pessoa atualizada:', data);
+      if (!data) {
+        console.warn('⚠️ Nenhum registro foi atualizado. Pode indicar problema de permissão.');
+        throw new Error('Nenhum registro foi atualizado. Verifique suas permissões.');
+      }
+      
+      console.log('✅ Pessoa atualizada com sucesso:', data);
       return data;
     } catch (error) {
       console.error('❌ Erro no serviço de atualização:', error);
