@@ -1910,9 +1910,13 @@ export type Database = {
           address: string | null
           avatar_url: string | null
           badge_number: string | null
+          bio: string | null
+          birth_date: string | null
           can_edit: boolean | null
+          civil_status: string | null
           congregation_id: string | null
           cpf: string
+          education_level: string | null
           email: string | null
           email_confirmed_at: string | null
           field_id: string | null
@@ -1947,9 +1951,13 @@ export type Database = {
           address?: string | null
           avatar_url?: string | null
           badge_number?: string | null
+          bio?: string | null
+          birth_date?: string | null
           can_edit?: boolean | null
+          civil_status?: string | null
           congregation_id?: string | null
           cpf: string
+          education_level?: string | null
           email?: string | null
           email_confirmed_at?: string | null
           field_id?: string | null
@@ -1984,9 +1992,13 @@ export type Database = {
           address?: string | null
           avatar_url?: string | null
           badge_number?: string | null
+          bio?: string | null
+          birth_date?: string | null
           can_edit?: boolean | null
+          civil_status?: string | null
           congregation_id?: string | null
           cpf?: string
+          education_level?: string | null
           email?: string | null
           email_confirmed_at?: string | null
           field_id?: string | null
@@ -2552,6 +2564,10 @@ export type Database = {
       calculate_student_average: {
         Args: { class_uuid?: string; student_uuid: string }
         Returns: number
+      }
+      can_edit_profile: {
+        Args: { target_profile_id: string }
+        Returns: boolean
       }
       can_manage_courses: {
         Args: Record<PropertyKey, never>

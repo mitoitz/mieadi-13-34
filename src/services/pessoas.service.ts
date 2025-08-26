@@ -173,13 +173,24 @@ export const pessoasService = {
       // Configurar contexto de autenticação
       await setUserContext();
       
+      // Verificar se o usuário tem permissão para criar perfis
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', await supabase.auth.getUser().then(u => u.data.user?.id))
+        .maybeSingle();
+      
+      if (!userProfile || !['diretor', 'admin', 'coordenador'].includes(userProfile.role)) {
+        throw new Error('Você não tem permissão para criar novos perfis');
+      }
+      
       // Remove campos que não existem na tabela profiles
       const { password, ...profileData } = pessoa as any;
       
       // Garantir que o ID seja gerado automaticamente se não fornecido
       const dataToInsert = {
         ...profileData,
-        id: profileData.id || undefined, // Deixar que o Supabase gere se não fornecido
+        id: profileData.id || undefined,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
@@ -190,11 +201,15 @@ export const pessoasService = {
         .from('profiles')
         .insert(dataToInsert)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('❌ Erro na inserção:', error);
         throw error;
+      }
+      
+      if (!data) {
+        throw new Error('Falha ao criar perfil');
       }
       
       console.log('✅ Pessoa criada:', data);
@@ -210,6 +225,23 @@ export const pessoasService = {
     console.log('📝 Dados recebidos:', updates);
     
     try {
+      // Configurar contexto de autenticação
+      await setUserContext();
+      
+      // Verificar se o usuário pode editar este perfil
+      const { data: canEdit, error: permissionError } = await supabase
+        .rpc('can_edit_profile', { target_profile_id: id });
+      
+      if (permissionError) {
+        console.error('❌ Erro ao verificar permissões:', permissionError);
+        throw new Error('Erro ao verificar permissões de edição');
+      }
+      
+      if (!canEdit) {
+        console.warn('⚠️ Usuário não tem permissão para editar este perfil');
+        throw new Error('Você não tem permissão para editar este perfil');
+      }
+      
       // Remove campos que não existem na tabela profiles
       const { password, ...profileUpdates } = updates as any;
       
@@ -222,13 +254,13 @@ export const pessoasService = {
       console.log('📤 Dados preparados para atualização:', dataToUpdate);
       console.log('🆔 ID do registro:', id);
       
-      // Fazer a atualização diretamente
+      // Fazer a atualização com verificação de permissão
       const { data, error } = await supabase
         .from('profiles')
         .update(dataToUpdate)
         .eq('id', id)
         .select()
-        .maybeSingle(); // Usar maybeSingle para evitar erros se não encontrar
+        .maybeSingle();
 
       if (error) {
         console.error('❌ Erro detalhado na atualização:', {
@@ -241,8 +273,8 @@ export const pessoasService = {
       }
       
       if (!data) {
-        console.warn('⚠️ Nenhum registro foi atualizado. Pode indicar problema de permissão.');
-        throw new Error('Nenhum registro foi atualizado. Verifique suas permissões.');
+        console.warn('⚠️ Nenhum registro foi atualizado.');
+        throw new Error('Registro não encontrado ou não foi possível atualizar');
       }
       
       console.log('✅ Pessoa atualizada com sucesso:', data);
