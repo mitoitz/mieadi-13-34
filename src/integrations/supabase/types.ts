@@ -2580,6 +2580,14 @@ export type Database = {
         Args: { user_id: string }
         Returns: Json
       }
+      add_super_admin: {
+        Args: {
+          admin_notes?: string
+          granted_by_id?: string
+          target_cpf: string
+        }
+        Returns: Json
+      }
       authenticate_admin_by_email: {
         Args: { p_email: string; p_password: string }
         Returns: Json
@@ -2978,6 +2986,20 @@ export type Database = {
           updated_at: string
         }[]
       }
+      list_super_admins: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          active: boolean
+          cpf: string
+          email: string
+          full_name: string
+          granted_at: string
+          granted_by_name: string
+          id: string
+          notes: string
+          role: string
+        }[]
+      }
       log_authentication_event: {
         Args: {
           p_additional_data?: Json
@@ -3032,6 +3054,10 @@ export type Database = {
           message: string
           success: boolean
         }[]
+      }
+      remove_super_admin: {
+        Args: { target_cpf: string }
+        Returns: Json
       }
       reset_pin_attempts_if_expired: {
         Args: { user_id: string }

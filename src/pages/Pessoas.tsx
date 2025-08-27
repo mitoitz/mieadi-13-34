@@ -69,6 +69,7 @@ import { NovaPessoaForm } from "@/components/forms/NovaPessoaForm";
 import { BadgeGenerator } from "@/components/ui/badge-generator";
 import { QRCodeManager } from "@/components/profile/QRCodeManager";
 import { PINResetDialog } from "@/components/auth/PINResetDialog";
+import { SuperAdminManager } from "@/components/admin/SuperAdminManager";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { usePessoasPaginadas } from "@/hooks/usePessoas";
@@ -429,103 +430,119 @@ export function Pessoas() {
         </Card>
       </div>
 
-      {/* Filters and Search */}
-      <Card>
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
-            Filtros e Busca
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Search */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Buscar por nome, email, CPF, telefone, congregação..."
-                value={searchTerm}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value === "") {
-                    clearSearch();
-                  } else {
-                    search(value);
-                  }
-                }}
-                className="pl-10"
-              />
-            </div>
-            
-            {/* Filter by Role */}
-            <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Filtrar por cargo" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">Todos os Cargos</SelectItem>
-                <SelectItem value="admin">Diretores</SelectItem>
-                <SelectItem value="pastor">Pastores</SelectItem>
-                <SelectItem value="professor">Professores</SelectItem>
-                <SelectItem value="coordenador">Coordenadores</SelectItem>
-                <SelectItem value="secretario">Secretários</SelectItem>
-                <SelectItem value="aluno">Alunos</SelectItem>
-                <SelectItem value="membro">Membros</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            {/* Sort */}
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Ordenar por" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="name">Nome</SelectItem>
-                <SelectItem value="role">Cargo</SelectItem>
-                <SelectItem value="congregation">Congregação</SelectItem>
-                <SelectItem value="created">Data de Cadastro</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            {/* Sort Order */}
-            <Button
-              variant="outline"
-              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-              className="w-full md:w-auto"
-            >
-              {sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
-            </Button>
-            
-            {/* View Mode */}
-            <div className="flex rounded-lg border">
-              <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("grid")}
-                className="rounded-r-none"
-              >
-                <Grid3X3 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant={viewMode === "list" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("list")}
-                className="rounded-l-none"
-              >
-                <List className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Tabs */}
+      <Tabs defaultValue="pessoas" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="pessoas" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Pessoas
+          </TabsTrigger>
+          {(user?.role === 'diretor' || user?.role === 'admin') && (
+            <TabsTrigger value="super-admins" className="flex items-center gap-2">
+              <Crown className="h-4 w-4" />
+              Super Administradores
+            </TabsTrigger>
+          )}
+        </TabsList>
 
-      {/* Results */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <p className="text-muted-foreground">
-            {filteredAndSortedPessoas.length} de {pessoas.length} pessoas encontradas
-          </p>
-        </div>
+        <TabsContent value="pessoas" className="space-y-6">
+          {/* Filters and Search */}
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2">
+                <Filter className="h-5 w-5" />
+                Filtros e Busca
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* Search */}
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Buscar por nome, email, CPF, telefone, congregação..."
+                    value={searchTerm}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === "") {
+                        clearSearch();
+                      } else {
+                        search(value);
+                      }
+                    }}
+                    className="pl-10"
+                  />
+                </div>
+                
+                {/* Filter by Role */}
+                <Select value={filterType} onValueChange={setFilterType}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Filtrar por cargo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos os Cargos</SelectItem>
+                    <SelectItem value="admin">Diretores</SelectItem>
+                    <SelectItem value="pastor">Pastores</SelectItem>
+                    <SelectItem value="professor">Professores</SelectItem>
+                    <SelectItem value="coordenador">Coordenadores</SelectItem>
+                    <SelectItem value="secretario">Secretários</SelectItem>
+                    <SelectItem value="aluno">Alunos</SelectItem>
+                    <SelectItem value="membro">Membros</SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                {/* Sort */}
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-full md:w-48">
+                    <SelectValue placeholder="Ordenar por" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="name">Nome</SelectItem>
+                    <SelectItem value="role">Cargo</SelectItem>
+                    <SelectItem value="congregation">Congregação</SelectItem>
+                    <SelectItem value="created">Data de Cadastro</SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                {/* Sort Order */}
+                <Button
+                  variant="outline"
+                  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                  className="w-full md:w-auto"
+                >
+                  {sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+                </Button>
+                
+                {/* View Mode */}
+                <div className="flex rounded-lg border">
+                  <Button
+                    variant={viewMode === "grid" ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("grid")}
+                    className="rounded-r-none"
+                  >
+                    <Grid3X3 className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "list" ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("list")}
+                    className="rounded-l-none"
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Results */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-muted-foreground">
+                {filteredAndSortedPessoas.length} de {pessoas.length} pessoas encontradas
+              </p>
+            </div>
 
         {/* Grid View */}
         {viewMode === "grid" && (
@@ -788,71 +805,6 @@ export function Pessoas() {
         )}
       </div>
 
-      {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-muted-foreground">
-                Página {page + 1} de {totalPages} • Total: {totalCount} registros
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={prevPage}
-                  disabled={!hasPrevPage || loading}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  Anterior
-                </Button>
-                
-                <div className="flex items-center gap-1">
-                  {/* Mostrar algumas páginas ao redor da atual */}
-                  {[...Array(Math.min(5, totalPages))].map((_, index) => {
-                    const pageNumber = Math.max(0, page - 2) + index;
-                    if (pageNumber >= totalPages) return null;
-                    
-                    return (
-                      <Button
-                        key={pageNumber}
-                        variant={pageNumber === page ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => goToPage(pageNumber)}
-                        disabled={loading}
-                        className="w-10"
-                      >
-                        {pageNumber + 1}
-                      </Button>
-                    );
-                  })}
-                </div>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={nextPage}
-                  disabled={!hasNextPage || loading}
-                >
-                  Próxima
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Loading overlay for pagination */}
-      {loading && (
-        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-card p-6 rounded-lg shadow-lg border flex items-center gap-3">
-            <Loader2 className="h-6 w-6 animate-spin" />
-            <span>Carregando página {page + 1}...</span>
-          </div>
-        </div>
-      )}
 
       {/* Dialogs */}
       <NovaPessoaForm
